@@ -9,3 +9,15 @@
     @apply font-sansSerif
   }
 }
+
+@layer components {
+  .invoice-table {
+    @apply grid grid-cols-invoiceTable gap-4 px-6 mb-3 w-full;
+  }
+}
+
+@layer utilities {
+  .center {
+    @apply flex items-center justify-center;
+  }
+}
