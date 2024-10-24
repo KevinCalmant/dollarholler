@@ -1,0 +1,10 @@
+{
+    "plugins": ["prettier-plugin-svelte", "prettier-plugin-tailwindcss"],
+    "tailwindConfig": "./tailwind.config.js",
+    "useTabs": false,
+    "singleQuote": true,
+    "comma": false,
+    "trailingComma": "all",
+    "printWidht": 120,
+    "overrides": [{ "files": "*.svelte", "options": { "parser": "svelte" } }]
+}
