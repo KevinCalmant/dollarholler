@@ -3,7 +3,7 @@
     "tailwindConfig": "./tailwind.config.js",
     "useTabs": false,
     "singleQuote": true,
-    "comma": false,
+    "semi": false,
     "trailingComma": "all",
     "printWidht": 120,
     "overrides": [{ "files": "*.svelte", "options": { "parser": "svelte" } }]
