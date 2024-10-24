@@ -26,6 +26,10 @@ export default {
         silver: '#c0c0c0',
         whisper: '#f9f4f9',
       },
+      zIndex: {
+        navBarToggle: 91,
+        navBar: 90,
+      }
     },
   },
   plugins: [],
