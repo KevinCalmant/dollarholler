@@ -36,20 +36,17 @@
   </div>
 </div>
 
-<!-- list of invoices -->
-<div>
-  <!-- header -->
-  <div class="lg:invoice-table table-header hidden text-daisyBush">
-    <h3>Status</h3>
-    <h3>Due Date</h3>
-    <h3>ID</h3>
-    <h3>Client</h3>
-    <h3 class="text-right">Amount</h3>
-    <div></div>
-    <div></div>
-  </div>
+<div class="lg:invoice-table table-header hidden text-daisyBush">
+  <h3>Status</h3>
+  <h3>Due Date</h3>
+  <h3>ID</h3>
+  <h3>Client</h3>
+  <h3 class="text-right">Amount</h3>
+  <div></div>
+  <div></div>
+</div>
 
-  <!-- invoices -->
+<div class="flex flex-col-reverse">
   {#each $invoices as invoice}
     <InvoiceRow {invoice} />
   {/each}

@@ -1,8 +1,9 @@
 <script lang="ts">
+  import AdditionalOptions from '$lib/components/AdditionalOptions.svelte'
   import Tag from '$lib/components/Tag.svelte'
   import { formatDate, isLate } from '$utils/dateHelpers'
   import { centsToDollars, sumLineItems } from '$utils/moneyHelpers'
-  import { Icon, Eye, EllipsisHorizontal } from 'svelte-hero-icons'
+  import { Icon, Eye, EllipsisHorizontal, PaperAirplane, Trash, Pencil } from 'svelte-hero-icons'
   import { InvoiceStatus } from '../../../enums'
 
   let { invoice }: { invoice: Invoice } = $props()
@@ -10,6 +11,7 @@
   let formattedTotalAmount = $state('')
   let dueDate = $state()
   let invoiceStatus = $state<InvoiceStatus>()
+  let isAdditionalOptionsShowing = $state(false)
 
   $effect(() => {
     formattedTotalAmount = centsToDollars(sumLineItems(invoice.lineItems))
@@ -22,6 +24,12 @@
       invoiceStatus = InvoiceStatus.PAID
     }
   })
+
+  const toggleAddtionalOptions = () => (isAdditionalOptionsShowing = !isAdditionalOptionsShowing)
+
+  const handleEdit = () => console.log('editing')
+  const handleDelete = () => console.log('deleting')
+  const handleSend = () => console.log('sending')
 </script>
 
 <div class="invoice-table invoice-row items-center rounded-lg bg-white py-3 shadow-tableRow lg:py-6">
@@ -32,13 +40,22 @@
   <div class="font-mondo amount textsm text-right font-bold lg:text-lg">
     {formattedTotalAmount}
   </div>
-  <div class="lg:center view-button textsm hidden lg:text-lg">
-    <button class="text-pastelPurple hover:text-daisyBush">
-      <Icon src={Eye} size="24" solid />
-    </button>
+  <div class="lg:center view-button hidden text-sm lg:text-lg">
+    <a href="#" class="text-pastelPurple hover:text-daisyBush"><Icon src={Eye} size="24" solid /></a>
   </div>
   <div class="lg:center more-buton hidden text-lg">
-    <a href="#" class="text-pastelPurple hover:text-daisyBush"><Icon src={EllipsisHorizontal} size="24" solid /></a>
+    <button class="text-pastelPurple hover:text-daisyBush" onclick={toggleAddtionalOptions}>
+      <Icon src={EllipsisHorizontal} size="24" solid />
+    </button>
+    {#if isAdditionalOptionsShowing}
+      <AdditionalOptions
+        options={[
+          { label: 'Send', icon: PaperAirplane, onClick: handleSend, disabled: false },
+          { label: 'Edit', icon: Pencil, onClick: handleEdit, disabled: false },
+          { label: 'Delete', icon: Trash, onClick: handleDelete, disabled: false },
+        ]}
+      />
+    {/if}
   </div>
 </div>
 
