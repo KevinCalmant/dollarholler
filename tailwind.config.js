@@ -10,6 +10,8 @@ export default {
     extend: {
       backgroundImage: {
         circle: 'url("/images/circle.svg")',
+        arrowRightUp: 'url("/images/arrow-right-up.svg")',
+        arrowLeftUp: 'url("/images/arrow-left-up.svg")',
       },
       borderWidth: {
         1: '1px',
