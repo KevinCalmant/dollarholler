@@ -1,20 +1,32 @@
 <script lang="ts">
   import Tag from '$lib/components/Tag.svelte'
+  import { formatDate, isLate } from '$utils/dateHelpers'
   import { centsToDollars, sumLineItems } from '$utils/moneyHelpers'
   import { Icon, Eye, EllipsisHorizontal } from 'svelte-hero-icons'
+  import { InvoiceStatus } from '../../../enums'
 
   let { invoice }: { invoice: Invoice } = $props()
 
   let formattedTotalAmount = $state('')
+  let dueDate = $state()
+  let invoiceStatus = $state<InvoiceStatus>()
 
   $effect(() => {
     formattedTotalAmount = centsToDollars(sumLineItems(invoice.lineItems))
+    dueDate = formatDate(invoice.dueDate)
+
+    if (invoice.invoiceStatus === 'draft') invoiceStatus = InvoiceStatus.DRAFT
+    else if (invoice.invoiceStatus === 'sent') {
+      invoiceStatus = isLate(invoice.dueDate) ? InvoiceStatus.LATE : InvoiceStatus.SENT
+    } else if (invoice.invoiceStatus === 'paid') {
+      invoiceStatus = InvoiceStatus.PAID
+    }
   })
 </script>
 
 <div class="invoice-table invoice-row items-center rounded-lg bg-white py-3 shadow-tableRow lg:py-6">
-  <div class="status"><Tag label={invoice.invoiceStatus} className="ml-auto lg:ml-0" /></div>
-  <div class="due-date textsm lg:text-lg">{invoice.dueDate}</div>
+  <div class="status"><Tag label={invoiceStatus} className="ml-auto lg:ml-0" /></div>
+  <div class="due-date textsm lg:text-lg">{dueDate}</div>
   <div class="invoice-number textsm lg:text-lg">{invoice.invoiceNumber}</div>
   <div class="client-name truncate text-base font-bold lg:text-xl">{invoice.client.name}</div>
   <div class="font-mondo amount textsm text-right font-bold lg:text-lg">
