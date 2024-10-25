@@ -1,5 +1,5 @@
 <script lang="ts">
-  export let label: 'draft' | 'sent' | 'current' | 'late' | 'paid' = 'draft'
+  export let label: 'draft' | 'sent' | 'current' | 'late' | 'paid' | 'archived' = 'draft'
   export let className = ''
 </script>
 
@@ -8,7 +8,7 @@
   class:inverted={label === 'draft'}
   class:success={label === 'sent' || label === 'current'}
   class:alert={label === 'late'}
-  class:archive={label === 'paid'}
+  class:archived={label === 'paid' || label === 'archived'}
 >
   {label}
 </div>
@@ -26,7 +26,7 @@
     @apply border-scarlet bg-scarlet text-goldenFizz;
   }
 
-  .archive {
+  .archived {
     @apply border-pastelPurple bg-pastelPurple text-white;
   }
 </style>
