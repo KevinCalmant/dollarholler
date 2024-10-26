@@ -7,6 +7,7 @@
   import { centsToDollars, sumLineItems } from '$utils/moneyHelpers'
   import BlankState from './BlankState.svelte'
   import InvoiceHeader from './InvoiceHeader.svelte'
+  import Button from '$lib/components/Button.svelte'
 
   onMount(() => {
     loadInvoices()
@@ -15,7 +16,6 @@
   const totalAmount = $derived(
     sumLineItems($invoices.flatMap((invoice) => invoice.lineItems).filter((item) => item != undefined)),
   )
-
   const formattedTotalAmount = $derived(centsToDollars(totalAmount))
 </script>
 
@@ -29,19 +29,17 @@
   <!-- Search field -->
   {#if $invoices?.length}
     <Search />
-  {:else }
-    <div />
+  {:else}
+    <div></div>
   {/if}
 
   <!-- new invoice button -->
   <div>
-    <button
-      class="relative translate-y-0 whitespace-nowrap rounded-lg bg-lavenderIndigo px-5 py-2 font-sansSerif text-base font-black text-white shadow-colored transition-all hover:-translate-y-2 hover:shadow-coloredHover lg:px-10 lg:py-3 lg:text-xl"
-      >+ Invoice</button
-    >
+    <Button label="+ Invoice" onClick={() => {}} />
   </div>
 </div>
 
+<!-- Invoices table -->
 {#if $invoices === null}
   Loading...
 {:else if $invoices.length}

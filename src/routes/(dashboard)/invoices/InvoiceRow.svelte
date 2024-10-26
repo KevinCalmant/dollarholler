@@ -5,6 +5,9 @@
   import { centsToDollars, sumLineItems } from '$utils/moneyHelpers'
   import { Icon, Eye, EllipsisHorizontal, PaperAirplane, Trash, Pencil } from 'svelte-hero-icons'
   import { InvoiceStatus } from '../../../enums'
+  import Modal from '$lib/components/Modal.svelte'
+  import Button from '$lib/components/Button.svelte'
+  import { deleteInvoice } from '$lib/stores/invoiceStore'
 
   let { invoice }: { invoice: Invoice } = $props()
 
@@ -12,6 +15,7 @@
   let dueDate = $state()
   let invoiceStatus = $state<InvoiceStatus>()
   let isAdditionalOptionsShowing = $state(false)
+  let isModalShowing = $state(false)
 
   $effect(() => {
     formattedTotalAmount = centsToDollars(sumLineItems(invoice.lineItems))
@@ -26,10 +30,17 @@
   })
 
   const toggleAddtionalOptions = () => (isAdditionalOptionsShowing = !isAdditionalOptionsShowing)
-
+  const toggleModal = () => {
+    if (isAdditionalOptionsShowing) toggleAddtionalOptions()
+    isModalShowing = !isModalShowing
+  }
   const handleEdit = () => console.log('editing')
-  const handleDelete = () => console.log('deleting')
   const handleSend = () => console.log('sending')
+
+  const handleDelete = () => {
+    deleteInvoice(invoice)
+    toggleModal()
+  }
 </script>
 
 <div class="invoice-table invoice-row items-center rounded-lg bg-white py-3 shadow-tableRow lg:py-6">
@@ -52,12 +63,26 @@
         options={[
           { label: 'Send', icon: PaperAirplane, onClick: handleSend, disabled: false },
           { label: 'Edit', icon: Pencil, onClick: handleEdit, disabled: false },
-          { label: 'Delete', icon: Trash, onClick: handleDelete, disabled: false },
+          { label: 'Delete', icon: Trash, onClick: toggleModal, disabled: false },
         ]}
       />
     {/if}
   </div>
 </div>
+
+<Modal isVisible={isModalShowing} on:close={toggleModal}>
+  <div class="flex h-full min-h-[175px] flex-col items-center justify-between gap-6">
+    <div class="text-center text-xl font-bold text-daisyBush">
+      Are you sure you want to delete this invoice to
+      <span class="text-scarlet">{invoice.client.name}</span> for
+      <span class="text-scarlet">{centsToDollars(sumLineItems(invoice.lineItems))}</span>
+    </div>
+    <div class="flex gap-4">
+      <Button label="Cancel" onClick={toggleModal} isAnimated={false} style="secondary" />
+      <Button label="Yes, delete it" onClick={handleDelete} isAnimated={false} style="destructive" />
+    </div>
+  </div>
+</Modal>
 
 <style lang="postcss">
   .invoice-row {
